@@ -13,7 +13,7 @@ def home_view(request):
 
 def register_view(request):
 	if request.user.is_authenticated:
-		return redirect('/wishes')
+		return redirect('/desires')
 
 	args = {}
 	if request.method == 'GET':
@@ -31,7 +31,7 @@ def register_view(request):
 
 def login_view(request):
 	if request.user.is_authenticated:
-		return redirect('/wishes')
+		return redirect('/desires')
 
 	args = {}
 	if request.method == 'GET':
@@ -46,7 +46,7 @@ def login_view(request):
 			user = authenticate(request, username=username, password=password)
 			if user is not None:
 				login(request, user)
-				return redirect('/wishes')
+				return redirect('/desires')
 	return render(request, 'login.html', args)
 
 
