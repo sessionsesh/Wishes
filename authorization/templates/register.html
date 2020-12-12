@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends 'home.html' %}
 
-<head>
-	<title>Register Page</title>
-</head>
+{% block title %}<title>Registration</title>{% endblock %}
 
-<body>
-	<div>
-		<form action="register" method="post">
-			{% csrf_token %}
-			{{ reg_form }}
-			<button type="submit">Registration</button>
-		</form>
-	</div>
-
-</body>
-
-</html>
+{% block content %}
+<div>
+	<form action="register" method="post">
+		{% csrf_token %}
+		{{ reg_form }}
+		<button type="submit">Registration</button>
+	</form>
+</div>
+{% endblock %}

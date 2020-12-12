@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'home.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-</head>
+{% block title %}<title>Login</title> {% endblock %}
 
-<body>
+{% block content %}
     <div>
         <form action="login" method="post">
             {% csrf_token %}
@@ -16,6 +11,4 @@
             <button type="submit">Login</button>
         </form>
     </div>
-</body>
-
-</html>
+{% endblock %}

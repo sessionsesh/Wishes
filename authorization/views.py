@@ -7,9 +7,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
+def home_view(request):
+	return render(request, "home.html")
+
+
 def register_view(request):
 	if request.user.is_authenticated:
-		return redirect('/users')
+		return redirect('/wishes')
 
 	args = {}
 	if request.method == 'GET':
@@ -27,7 +31,7 @@ def register_view(request):
 
 def login_view(request):
 	if request.user.is_authenticated:
-		return redirect('/users')
+		return redirect('/wishes')
 
 	args = {}
 	if request.method == 'GET':
@@ -42,8 +46,9 @@ def login_view(request):
 			user = authenticate(request, username=username, password=password)
 			if user is not None:
 				login(request, user)
-				return redirect('/users')
+				return redirect('/wishes')
 	return render(request, 'login.html', args)
+
 
 @login_required
 def logout_view(request):
@@ -51,8 +56,22 @@ def logout_view(request):
 	return redirect('/login')
 
 @login_required
-def users_view(request):
-	users = User.objects.all()
-	args = {'users': users,
-			'user': request.user.username}
-	return render(request, "users.html", args)
+def user_profile_view(request):
+	'''
+	Show user profile
+	'''
+	if request.method == 'GET':
+		user = request.user
+		args = {'user': user}
+		return render(request, "profile.html", args)
+
+@login_required
+def profile_view(request, ID):
+	'''
+	Show another person profile
+	'''
+	if request.method == 'GET':
+		user = User.objects.get(pk=ID)
+		args = {'user': user}
+		return render(request, "profile.html", args)
+    

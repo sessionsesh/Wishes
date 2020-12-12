@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title%}{{ user.username }}'s profile {% endblock %}
+
+{% block content %}
+username: {{ user.username }}</br>
+id: {{ user.id }}</br>
+<a href="/friends/send_request/{{ user.id }}" type="button">Send friend request</a>
+{% endblock %}
