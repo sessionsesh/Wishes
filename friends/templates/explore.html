@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} <title>Explore</title> {% endblock %}
+{% block content %}
+<h1>Explore new friends</h1>
+<input type="text" value="" placeholder="Try to enter some symbols" id="explore-input">
+<div>
+    <ul id="explored_users">
+
+    </ul>
+</div>
+{% endblock %}
+
+{% block script%}
+<script>
+    var explore_input = $("#explore-input")
+    explore_input.on("change paster keyup", function (event) {
+        /* Send request for get users with matching name  */
+        $.ajax({
+            type: "GET",
+            dataType: "html",
+            url: "ajax/explore_users/".concat(explore_input.val()),
+            success: function (data) {
+                $("#explored_users").html(data)
+            },
+            error: function (info) {
+                console.log(info)
+            }
+
+        })
+    })
+</script>
+{% endblock %}
