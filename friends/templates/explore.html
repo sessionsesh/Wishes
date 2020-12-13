@@ -13,7 +13,7 @@
 {% block script%}
 <script>
     var explore_input = $("#explore-input")
-    explore_input.on("change paster keyup", function (event) {
+    explore_input.on("keyup", function (event) {
         /* Send request for get users with matching name  */
         $.ajax({
             type: "GET",

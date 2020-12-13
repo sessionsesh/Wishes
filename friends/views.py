@@ -10,7 +10,8 @@ from django.http.response import HttpResponse
 def friends_view(request):
     user = request.user
     if request.method == 'GET':
-        relationships = Relationship.objects.filter(Q(user1=user.id) | Q(user2=user.id))
+        relationships = Relationship.objects.filter(
+            Q(user1=user.id) | Q(user2=user.id))
 
         # Fill friends list
         friends_list = []
@@ -58,7 +59,8 @@ def send_friend_request(request, ID):
             # Check that user with ID exists
             try:
                 # Check that user already have some(accepted or not) relationshipwith user where user.id == ID
-                rs = Relationship.objects.filter(user2=request_sender, user1=ID)
+                rs = Relationship.objects.filter(
+                    user2=request_sender, user1=ID)
                 if rs.exists():
                     rs = rs.first()
                     if rs.accept2 == True:
@@ -69,7 +71,8 @@ def send_friend_request(request, ID):
                     # Check that sender already send friend request to user with ID
                     if not Relationship.objects.filter(user1=request_sender.id, user2=ID).exists():
                         request_receiver = User.objects.get(pk=ID)
-                        new_relationship = Relationship(user1=request_sender, user2=request_receiver, accept1=True)
+                        new_relationship = Relationship(
+                            user1=request_sender, user2=request_receiver, accept1=True)
                         new_relationship.save()
                         return HttpResponse("Request was send successfully")
                     else:
@@ -114,7 +117,8 @@ def dissolve_relationship(request, ID):
             # If GET request sender is user1 in the db table, then user2.id = ID,
             # else GET sender is user2 in the db table and user1.id = ID
             relationship_to_dissolve = \
-                Relationship.objects.get((Q(user1=ID) | Q(user2=ID)) & (Q(user1=dissolve_initiator) | Q(user2=dissolve_initiator)))
+                Relationship.objects.get((Q(user1=ID) | Q(user2=ID)) & (
+                    Q(user1=dissolve_initiator) | Q(user2=dissolve_initiator)))
             relationship_to_dissolve.delete()
             return HttpResponse("Relationship succesfully dissolved")
         except Relationship.DoesNotExist:
@@ -130,10 +134,8 @@ From this line will be defined functions needs for ajax
 def explore_users(request, regexp):
     if request.method == 'GET':
         regexp = r'' + regexp
-        print(regexp)
-        users_list = User.objects.filter(username__iregex=regexp)
-        users_list.all().exclude(pk=request.user.id)  # excluding user, who makes request
-        print(users_list)
+        users_list = User.objects.filter(username__iregex=regexp).exclude(
+            pk=request.user.id)  # excluding user, who makes request
         args = {'users': users_list}
         return render(request, 'users.html', args)
 
@@ -141,4 +143,5 @@ def explore_users(request, regexp):
 @login_required
 def explore_users_empty(request):
     if request.method == 'GET':
-        return render(request, 'users.html')
+        args = {'users': User.objects.all().exclude(pk=request.user.id)}
+        return render(request, 'users.html', args)
