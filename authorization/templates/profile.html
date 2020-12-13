@@ -6,4 +6,33 @@
 username: {{ user.username }}</br>
 id: {{ user.id }}</br>
 <a href="/friends/send_request/{{ user.id }}" type="button">Send friend request</a>
+
+{% if desire.user == user%}
+{% for desire in desires_list %}
+<div class="desire">
+    <div class="desire-name">
+        <span>{{ desire.name }}</span>
+    </div>
+    <div class="desire-description">
+        <span>{{ desire.description }}</span>
+    </div>
+    <div class="desire-url">
+        <a href="{{ desire.url }}">{{ desire.url }}</a>
+    </div>
+    <div class="desire-image">
+        <a href="{{ desire.image_url }}">{{ desire.image_url }}</a>
+    </div>
+    <div class="desire-label">
+        <span>{{ desire.label }}</span>
+    </div>
+    <div class="desire-creation">
+        <span>{{ desire.creation_date }}</span>
+    </div>
+</div>
+{% empty %}
+</br>
+{{ user.username }} don't have any public desire
+{% endfor %}
+{% endif %}
+
 {% endblock %}

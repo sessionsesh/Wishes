@@ -5,7 +5,7 @@ from django.http import Http404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
+from desires.models import *
 
 def home_view(request):
 	return render(request, "home.html")
@@ -72,6 +72,8 @@ def profile_view(request, ID):
 	'''
 	if request.method == 'GET':
 		user = User.objects.get(pk=ID)
-		args = {'user': user}
+		desires_list = Desire.objects.filter(user=ID)
+		args = {'user': user,
+				'desires_list': desires_list}
 		return render(request, "profile.html", args)
     

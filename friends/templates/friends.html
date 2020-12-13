@@ -12,7 +12,7 @@
 <h1>Your friends list:</h1>
 <ul>
     {% for friend in friends %}
-    <li>{{ friend.username }} </br> <a href="{% url 'friends:dissolve' friend.id %}">del</a></li>
+    <li> <a href="{% url 'authorization:profile' friend.id %}">{{ friend.username }}</a> </br> <a href="{% url 'friends:dissolve' friend.id %}">del</a></li>
     {% empty %}
     You don't have any friend. OMEGALUL
     {% endfor %}

@@ -1,2 +1,46 @@
 {% extends 'base.html' %}
 {% block title%} Desires {% endblock %}
+{% block content %}
+<div class="desires-container">
+    {% for desire in desires_list %}
+    <div class="desire">
+        <div class="desire-name">
+            <span>{{ desire.name }}</span>
+        </div>
+        <div class="desire-description">
+            <span>{{ desire.description }}</span>
+        </div>
+        <div class="desire-url">
+            <a href="{{ desire.url }}">{{ desire.url }}</a>
+        </div>
+        <div class="desire-image">
+            <a href="{{ desire.image_url }}">{{ desire.image_url }}</a>
+        </div>
+        <div class="desire-label">
+            <span>{{ desire.label }}</span>
+        </div>
+        <div class="desire-creation">
+            <span>{{ desire.creation_date }}</span>
+        </div>
+        <div class="delete-desire">
+            <form method="POST" action="{% url 'desires:delete_desire' desire.id %}">
+                {% csrf_token %}
+                <input type="submit" value="{{ desire.id }}">
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    You don't have any desire
+    {% endfor %}
+</div>
+<div class="add-desire">
+
+</div>
+<div class="delete-desire">
+    <form method="POST" action="desires/add">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="ADD">
+    </form>
+</div>
+{% endblock %}
