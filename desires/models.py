@@ -8,7 +8,7 @@ class Label(models.Model):
 class Desire(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(blank=False, max_length=20)
-    description = models.TextField(blank=True)
+    description = models.TextField(default='Описания нет')
     url = models.URLField()
     image_url = models.URLField()
     label = models.ForeignKey(Label, on_delete=models.SET_NULL, null=True)

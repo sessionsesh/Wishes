@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import *
@@ -64,9 +64,9 @@ def send_friend_request(request, ID):
                 if rs.exists():
                     rs = rs.first()
                     if rs.accept2 == True:
-                        return HttpResponse("You already friends")
+                        return render(request, "message.html", {'message':'Вы уже дружите с этим пользователем'})
                     else:
-                        return HttpResponse("This user already send friend request to you")
+                        return render(request, "message.html", {'message':'Этот пользователь уже отправил вам заявку. Посмотрите во вкладке "Друзья" '})
                 else:
                     # Check that sender already send friend request to user with ID
                     if not Relationship.objects.filter(user1=request_sender.id, user2=ID).exists():
@@ -74,13 +74,13 @@ def send_friend_request(request, ID):
                         new_relationship = Relationship(
                             user1=request_sender, user2=request_receiver, accept1=True)
                         new_relationship.save()
-                        return HttpResponse("Request was send successfully")
+                        return redirect('/friends')
                     else:
-                        return HttpResponse("You already send request to this user")
+                        return render(request, "message.html", {'message':'Вы уже отправили заявку этому пользователю'})
             except User.DoesNotExist:
-                return HttpResponse("User with this ID doesnt exists")
+                return render(request, "message.html", {'message':'Пользователя с таким ID не существует'})
         else:
-            return HttpResponse("You can't send request to yourself")
+            return render(request, "message.html", {'message':'Вы не можете отправить заявку самому себе'})
 
 
 @login_required
@@ -97,13 +97,14 @@ def accept_friend_request(request, ID):
                 if relationship_to_accept.accept2 == False:
                     relationship_to_accept.accept2 = True
                     relationship_to_accept.save()
-                    return HttpResponse("Accepted")
+
+                    return redirect('/friends')
                 else:
-                    return HttpResponse("Already accepted")
+                    return render(request, "message.html", {'message':'Вы уже друзья'})
             except Relationship.DoesNotExist:
-                return HttpResponse("There isn't such friend request")
+                return render(request, "message.html", {'message':'Такой заявки не существует'})
         else:
-            return HttpResponse("You can't accept requests from yourself")
+            return render(request, "message.html", {'message':'Вы не можете принять заявку от самого себя'})
 
 
 @login_required
@@ -120,9 +121,9 @@ def dissolve_relationship(request, ID):
                 Relationship.objects.get((Q(user1=ID) | Q(user2=ID)) & (
                     Q(user1=dissolve_initiator) | Q(user2=dissolve_initiator)))
             relationship_to_dissolve.delete()
-            return HttpResponse("Relationship succesfully dissolved")
+            return redirect('/friends')
         except Relationship.DoesNotExist:
-            return HttpResponse("You don't have relationship with this user")
+            return render(request, "message.html", {'message':'Вы не дружите с этим пользователем'})
 
 
 """

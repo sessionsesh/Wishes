@@ -1,46 +1,94 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title%} Desires {% endblock %}
+
+{% block css %}
+
+{% endblock%}
+
 {% block content %}
 <div class="desires-container">
-    {% for desire in desires_list %}
-    <div class="desire">
-        <div class="desire-name">
-            <span>{{ desire.name }}</span>
+    <div class="row m-4">
+        {% for desire in desires_list %}
+        <div class="card m-1" style="width: 18rem;">
+            {% if desire.image_url %}
+            <img class="card-img-top" src=" {{ desire.image_url }}" alt="Card image cap">
+            {% else %}
+            <img class="card-img-top" src="{% static 'images/wish.png' %}" alt="Card image cap">
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title">{{ desire.name }} <span class="badge badge-secondary"
+                        style="font-size: 0.8rem">{{ desire.label.name }}</span></h5>
+                <p class="card-text">{{ desire.description }}</p>
+                <a href="{{ desire.url }}">{{ desire.url }}</a>
+                <p>{{ desire.creation_date }}</p>
+                <a href="{% url 'desires:delete_desire' desire.id %}" class="btn btn-danger">Удалить</a>
+                <a href="" class="btn btn-secondary a-edit" value="{% url 'desires:edit_desire' desire.id %}"
+                    data-toggle="modal" data-target="#modal-form-edit">Изменить</a>
+            </div>
         </div>
-        <div class="desire-description">
-            <span>{{ desire.description }}</span>
-        </div>
-        <div class="desire-url">
-            <a href="{{ desire.url }}">{{ desire.url }}</a>
-        </div>
-        <div class="desire-image">
-            <a href="{{ desire.image_url }}">{{ desire.image_url }}</a>
-        </div>
-        <div class="desire-label">
-            <span>{{ desire.label }}</span>
-        </div>
-        <div class="desire-creation">
-            <span>{{ desire.creation_date }}</span>
-        </div>
-        <div class="delete-desire">
-            <form method="POST" action="{% url 'desires:delete_desire' desire.id %}">
-                {% csrf_token %}
-                <input type="submit" value="{{ desire.id }}">
-            </form>
+        {% empty %}
+        <h3>Добавьте свои желания сюда!</h3>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="edit-desire">
+    <div id="modal-form-edit" class="modal m-5" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id='edit-form'  method="POST" action="desires/edit">
+                    <div class="modal-header">
+                        <h3>Вы хотите что-то изменить?</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    {% empty %}
-    You don't have any desire
-    {% endfor %}
 </div>
-<div class="add-desire">
 
+<div class="add-desire">
+    <button class="btn btn-primary ml-4" data-toggle="modal" data-target="#modal-form-delete">Добавить</button>
+    <div id="modal-form-delete" class="modal m-5" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="POST" action="desires/add">
+                    <div class="modal-header">
+                        <h3>Что вы хотите?</h3>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="delete-desire">
-    <form method="POST" action="desires/add">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="ADD">
-    </form>
-</div>
+{% endblock %}
+{% block script %}
+<script>
+    $('.a-edit').on('click', function () {
+        console.log('TEST',$(this).attr('value'))
+        $('#edit-form').attr('action', $(this).attr('value'))
+    })
+</script>
 {% endblock %}

@@ -1,20 +1,27 @@
 {% extends 'base.html' %}
 {% block title %} Friends{% endblock %}
 {% block content %}
-<h1>Pending friend request:</h1>
-<ul>
+<h1 class="ml-3">Заявки в друзья</h1>
+<ul class="list-group">
     {% for friend in friend_requests %}
-    <li><a href="accept_request/{{ friend.id }}">{{ friend.username }}</a></li>
+    <li class="list-group-item"> 
+        username: <a href="{% url 'authorization:profile' friend.id %}">{{ friend.username }}</a></br>
+        <a href="{% url 'friends:accept_friend_request' friend.id %}">Принять</a>
+        <a href="{% url 'friends:dissolve' friend.id %}">Отклонить</a>
+    </li>
     {% empty %}
-    No friend requests. KEKW
+    <span class="ml-4">Пока заявок нет</span>
     {% endfor %}
 </ul>
-<h1>Your friends list:</h1>
-<ul>
+<h1 class="ml-3">Ваши друзья</h1>
+<ul class="list-group">
     {% for friend in friends %}
-    <li> <a href="{% url 'authorization:profile' friend.id %}">{{ friend.username }}</a> </br> <a href="{% url 'friends:dissolve' friend.id %}">del</a></li>
+    <li class="list-group-item"> 
+        username: <a href="{% url 'authorization:profile' friend.id %}">{{ friend.username }}</a></br>
+        <a href="{% url 'friends:dissolve' friend.id %}">Удалить</a>
+    </li>
     {% empty %}
-    You don't have any friend. OMEGALUL
+    <span class="ml-4">Попробуйте найти новых друзей во вкладке "Поиск"</span>
     {% endfor %}
 </ul>
 {% endblock %}

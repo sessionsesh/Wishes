@@ -5,4 +5,5 @@ app_name='desires'
 
 urlpatterns = [path('desires', views.desires_view, name="desires"),
                path('desires/delete/<ID>', views.desire_delete, name="delete_desire"),
-               path('desires/add', views.desire_add, name="add_desire")]
+               path('desires/add', views.desire_add, name="add_desire"),
+               path('desire/edit/<ID>', views.desire_edit, name="edit_desire")]
