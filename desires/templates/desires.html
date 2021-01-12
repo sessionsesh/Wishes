@@ -38,14 +38,31 @@
     <div id="modal-form-edit" class="modal m-5" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form id='edit-form'  method="POST" action="desires/edit">
+                <form id='edit-form' method="POST" action="desires/edit">
                     <div class="modal-header">
                         <h3>Вы хотите что-то изменить?</h3>
                     </div>
                     <div class="modal-body">
                         <div class="form">
                             {% csrf_token %}
-                            {{ form.as_p }}
+                            <p>
+                                <label for="id_name">Имя: </label>
+                                {{ form.name }}
+                            </p>
+                            <p>
+                                <label for="id_description">Описание: </label>
+                                {{ form.description }}
+                            </p>
+
+                            <p>
+                                <label for="id_image_url">Ссылка на каринку: </label>
+                                {{ form.image_url }}
+                            </p>
+
+                            <p>
+                                <label for="id_image_url">Тэг: </label>
+                                {{ form.label }}
+                            </p>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -71,7 +88,24 @@
                     <div class="modal-body">
                         <div class="form">
                             {% csrf_token %}
-                            {{ form.as_p }}
+                            <p>
+                                <label for="id_name">Имя: </label>
+                                {{ form.name }}
+                            </p>
+                            <p>
+                                <label for="id_description">Описание: </label>
+                                {{ form.description }}
+                            </p>
+
+                            <p>
+                                <label for="id_image_url">Ссылка на каринку: </label>
+                                {{ form.image_url }}
+                            </p>
+
+                            <p>
+                                <label for="id_image_url">Тэг: </label>
+                                {{ form.label }}
+                            </p>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -87,7 +121,7 @@
 {% block script %}
 <script>
     $('.a-edit').on('click', function () {
-        console.log('TEST',$(this).attr('value'))
+        console.log('TEST', $(this).attr('value'))
         $('#edit-form').attr('action', $(this).attr('value'))
     })
 </script>

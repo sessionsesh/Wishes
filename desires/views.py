@@ -59,8 +59,11 @@ def desire_edit(request, ID):
         if form.is_valid():
             desire = Desire.objects.get(pk=ID)
             desire.name = form.data.get('name')
-            desire.description = form.data.get('description')
+            if form.data.get('description') != '':
+                desire.description = form.data.get('description')
             desire.image_url = form.data.get('image_url')
+            label = Label.objects.create(name=form.data.get('label'))
+            desire.label = label
             desire.save()
         args = {'form': form}
         return redirect('/desires')
